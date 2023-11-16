@@ -1,0 +1,29 @@
+services:
+  DataBase:
+    # Se utiliza esta version para el soporte de las arquitecturas  amd64 & arm64
+    image: mariadb:10.6.4-focal
+    command: '--default-authentication-plugin=mysql_native_password'
+    volumes:
+      - db_data:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=wordpress
+      - MYSQL_USER=wordpress
+      - MYSQL_PASSWORD=password
+    expose:
+      - 3306
+      - 33060
+  wordpress:
+    image: wordpress:latest
+    volumes:
+      - wp_data:/var/www/html
+    ports:
+      - 80:80
+    environment:
+      - WORDPRESS_DB_HOST=DataBase
+      - WORDPRESS_DB_USER=wordpress
+      - WORDPRESS_DB_PASSWORD=password
+      - WORDPRESS_DB_NAME=wordpress
+volumes:
+  db_data:
+  wp_data:
